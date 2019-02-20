@@ -110,8 +110,14 @@ class PostsController extends Controller
 
     public function delete($id)
     {
-      Post::where('id',$id)->delete();
-      Session::flash('message','Post Deleted Successfully');
-       return redirect('/posts/myposts');
+      if ($id == auth()->user()->name) {
+         Post::where('id',$id)->delete();
+         Session::flash('message','Post Deleted Successfully');
+         return redirect('/posts/myposts');
+      }else{
+        Session::flash('error',"Sorry , You're Not Authorized to do this action ");
+        return redirect()->back();
+      }
+     
     }
 }
